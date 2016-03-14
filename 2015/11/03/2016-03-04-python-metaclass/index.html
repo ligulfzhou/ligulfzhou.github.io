@@ -9,8 +9,7 @@
     
     <meta name="author" content="Ligulfzhou">
     
-    <meta name="description" content="这里自己整理了一下python的metaclass在python中，所有都是对象，基本类型变量是，数据类型(int, float…)也是，就算是class也是对象
-1234567891011121314151617181920212223242526&amp;gt;&amp;gt;&amp;gt; # 基本数据类型&amp;gt;">
+    <meta name="description" content="这里自己整理了一下python的metaclass在python中，所有都是对象，基本类型变量是，数据类型(int, float…)也是，就算是class也是对象普通意义上的class，定义了该class实例的属性和方法， 而metaclass（即class的类），它定义了它的实例（class）以及">
     
     
     
@@ -33,7 +32,7 @@
 				<h1 class="site-name"><a href="/" title="ligulfzhou">ligulfzhou</a></h1>
 				<h2 class="blog-motto">北漂小小程序猿</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -50,7 +49,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:ligulfzhou.github.io">
 					</form>
 					
@@ -74,7 +73,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-11-03T03:02:42.000Z" itemprop="datePublished">2015-11-03</time>
-    更新日期:<time datetime="2016-03-08T08:57:04.000Z" itemprop="dateModified">2016-03-08</time>
+    Updated:<time datetime="2016-03-14T14:03:32.000Z" itemprop="dateModified">2016-03-14</time>
     
   </p>
 </header>
@@ -82,16 +81,19 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
 		</div>
 		
-		<p>这里自己整理了一下python的metaclass<br>在python中，所有都是对象，基本类型变量是，数据类型(int, float…)也是，就算是class也是对象</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; # 基本数据类型</span><br><span class="line">&gt;&gt;&gt; foo = 78</span><br><span class="line">&gt;&gt;&gt; type(foo)</span><br><span class="line">&lt;class 'int'&gt;</span><br><span class="line">&gt;&gt;&gt; type(foo.__class__)</span><br><span class="line">&lt;class 'type'&gt;</span><br><span class="line">&gt;&gt;&gt; type(foo.__class__.__bases__)</span><br><span class="line">&lt;class 'tuple'&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; # 数据类型</span><br><span class="line">&gt;&gt;&gt; type(int)</span><br><span class="line">&lt;class 'type'&gt;</span><br><span class="line">&gt;&gt;&gt; type(float)</span><br><span class="line">&lt;class 'type'&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; # class</span><br><span class="line">&gt;&gt;&gt; class Bar(object):pass</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; type(Bar.__class__)</span><br><span class="line">&lt;class 'type'&gt;</span><br><span class="line">&gt;&gt;&gt; type(Bar.__bases__)</span><br><span class="line">&lt;class 'tuple'&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; # type</span><br><span class="line">&gt;&gt;&gt; type(type)</span><br><span class="line">&lt;class 'type'&gt;</span><br></pre></td></tr></table></figure>
-<p>变量foo是int类的对象， int类型是type的对象， 类也是type的对象，type自身也是type的对象</p>
-<p>类是用来构造对象的，而type用来构造类，确切说，metaclass来构造类，type是python的默认的metaclass</p>
-<p>如何使用metaclass<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; class MyType(type):pass</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; # metaclass的使用(python3)</span><br><span class="line">&gt;&gt;&gt; class MyClass(metaclass=MyType):pass</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; # myClass 是MyClass的对象</span><br><span class="line">&gt;&gt;&gt; myClass = MyClass()</span><br><span class="line">&gt;&gt;&gt; type(myClass)</span><br><span class="line">&lt;class '__main__.MyClass'&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; # MyType是自定义的metaclass</span><br><span class="line">&gt;&gt;&gt; type(MyType)</span><br><span class="line">&lt;class 'type'&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; # MyClass是MyType的对象</span><br><span class="line">&gt;&gt;&gt; type(MyClass)</span><br><span class="line">&lt;class '__main__.MyType'&gt;</span><br></pre></td></tr></table></figure></p>
-<p>经典的例子–实现单例<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span><span class="params">(type)</span>:</span></span><br><span class="line">    instance = <span class="keyword">None</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(cls, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> cls.instance:</span><br><span class="line">            cls.instance = super(Singleton, cls).__call__(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> cls.instance</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span><span class="params">(object, metaclass=Singleton)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">a = Test()</span><br><span class="line">b = Test()</span><br><span class="line">print(id(a) == id(b))  <span class="comment">#True</span></span><br></pre></td></tr></table></figure></p>
+		<p>这里自己整理了一下python的metaclass<br>在python中，所有都是对象，基本类型变量是，数据类型(int, float…)也是，就算是class也是对象<br>普通意义上的class，定义了该class实例的属性和方法， 而metaclass（即class的类），它定义了它的实例（class）以及它实例的实例（class的实例）的属性和方法</p>
+<p>python默认的metaclass是type</p>
+<p>首先介绍使用type来生成类<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class = type(name, bases, dict)</span><br><span class="line"># name: 类名， bases: 继承的基类， dict：属性</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; def echoAge(self):</span><br><span class="line">...   return self.age</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; A = type('A', (object, ), &#123;'age': 10, 'echoAge': echoAge&#125;)</span><br><span class="line">&gt;&gt;&gt; a = A()</span><br><span class="line">&gt;&gt;&gt; a.echoAge()</span><br><span class="line">10</span><br><span class="line">&gt;&gt;&gt; a.age</span><br><span class="line">10</span><br></pre></td></tr></table></figure></p>
+<p>现在真正以类的方式来实现metaclass<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; class Meta(type):</span><br><span class="line">...     def __new__(metacls, name, bases, dct):</span><br><span class="line">...             print("enter __new__: ", metacls, name, bases, dct)</span><br><span class="line">...             return super(Meta, metacls).__new__(metacls, name, bases, dct)</span><br><span class="line">...     def __init__(cls, name, bases, dct):</span><br><span class="line">...             print("enter __init__: ", cls, name, bases, dct)</span><br><span class="line">...             super(Meta, cls).__init__(name, bases, dct)</span><br><span class="line">...     def __call__(cls, *args, **kwargs):</span><br><span class="line">...             print('enter __call__: ', cls, *args, **kwargs)</span><br><span class="line">...             return super(Meta, cls).__call__(*args, **kwargs)</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; class A(object, metaclass=Meta):</span><br><span class="line">...     def echoAge(self):</span><br><span class="line">...             return 10</span><br><span class="line">...     age = 10</span><br><span class="line">...</span><br><span class="line">enter __new__:  &lt;class '__main__.Meta'&gt; A (&lt;class 'object'&gt;,) &#123;'__qualname__': 'A', '__module__': '__main__', 'echoAge': &lt;function A.echoAge at 0x1071f6a60&gt;, 'age': 10&#125;</span><br><span class="line">enter __init__:  &lt;class '__main__.A'&gt; A (&lt;class 'object'&gt;,) &#123;'__qualname__': 'A', '__module__': '__main__', 'echoAge': &lt;function A.echoAge at 0x1071f6a60&gt;, 'age': 10&#125;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; a = A()</span><br><span class="line">enter __call__:  &lt;class '__main__.A'&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Meta.<strong>new</strong>在生成A的对象时被调用，在调用return super(Meta, metacls).<strong>new</strong>(metacls, name, bases, dct)前，可对A做修改， 如增加/修改A的属性或方法<br>Meta.<strong>init</strong>在生成A对象后进行初始化时被调用， 可直接对生成的对象A做修改，如增加/修改A的属性或方法<br>Meta.<strong>call</strong>在A（作为类）实例化时被调用（用metaclass来实现单例模式时就是在这里做文章）</p>
+<p>实现将类的方法名，属性都改成大写的<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Meta</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(metacls, name, bases, dct)</span>:</span></span><br><span class="line">        mydct = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> k, v <span class="keyword">in</span> dct.items():</span><br><span class="line">            mydct.update(&#123;k.upper(): v&#125;)</span><br><span class="line">        <span class="keyword">return</span> super(Meta, metacls).__new__(metacls, name, bases, mydct)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object, metaclass=Meta)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lower</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'lower'</span></span><br><span class="line">    lowercase = <span class="string">'lowercase'</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = A()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.LOWER()</span><br><span class="line"><span class="string">'lower'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.LOWERCASE</span><br><span class="line"><span class="string">'lowercase'</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>或者改写<strong>init</strong>方法来实现加一些方法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upper</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'upper'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Meta</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(cls, name, bases, dct)</span>:</span></span><br><span class="line">        super(Meta, cls).__init__(name, bases, dct)    </span><br><span class="line">        cls.upper = upper</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object, metaclass=Meta)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lower</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'lower'</span></span><br><span class="line"></span><br><span class="line">a = A()</span><br><span class="line">a.upper()  ;<span class="string">'upper'</span></span><br><span class="line">a.lower()  ;<span class="string">'lower'</span></span><br></pre></td></tr></table></figure></p>
+<p>改写<strong>call</strong>方法实现单例[类实例化时会调用<strong>call</strong>]<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span><span class="params">(type)</span>:</span></span><br><span class="line">    instance = <span class="keyword">None</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(cls, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> cls.instance:</span><br><span class="line">            cls.instance = super(Singleton, cls).__call__(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> cls.instance</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span><span class="params">(object, metaclass=Singleton)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">a = Test()</span><br><span class="line">b = Test()</span><br><span class="line">print(id(a) == id(b))  <span class="comment">#True</span></span><br></pre></td></tr></table></figure></p>
+<p>参考： (<a href="http://eli.thegreenplace.net/2011/08/14/python-metaclasses-by-example)[http://eli.thegreenplace.net/2011/08/14/python-metaclasses-by-example" target="_blank" rel="external">http://eli.thegreenplace.net/2011/08/14/python-metaclasses-by-example)[http://eli.thegreenplace.net/2011/08/14/python-metaclasses-by-example</a>]</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -121,18 +123,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/11/03/2015-11-03-python-scripts-args/" title="Python获取参数">
+ <a href="/2015/11/04/2015-11-04-simple-logging-handler/" title="使用logging库建简单的日志记录">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  Python获取参数</span>
+  使用logging库建简单的日志记录</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/11/02/2015-11-02-install-mongodb/"  title="MongoDB 1: 安装MongoDB">
+<a href="/2015/11/03/2015-11-03-python-scripts-args/"  title="Python获取参数">
  <strong>NEXT:</strong><br/> 
- <span>MongoDB 1: 安装MongoDB
+ <span>Python获取参数
 </span>
 </a>
 </div>
@@ -145,20 +147,20 @@
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
   
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 			<li><a href="/categories/MongoDB/" title="MongoDB">MongoDB<sup>5</sup></a></li>
@@ -175,7 +177,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Logging/" title="Logging">Logging<sup>1</sup></a></li>
@@ -203,7 +205,7 @@
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
