@@ -62,16 +62,30 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2015/11/05/2015-11-02-mongodb-2-crud-operations/" title="MongoDB 2: MongoDB的CRUD操作" itemprop="url">
+    <a href="/2015/11/12/2015-11-12-tornado-websocket/" title="一次tornado websocket的踩坑记" itemprop="url">
   
-    <h1 itemprop="name">MongoDB 2: MongoDB的CRUD操作</h1>
+    <h1 itemprop="name">一次tornado websocket的踩坑记</h1>
     
      
-           <p itemprop="description" >mongo使用一种叫[BSON]的数据结构
-做实验前先插入点数据12345678ligulfzhouMac-mini:~ ligulfzhou$ ~/py3venv/bin/python3&amp;gt;&amp;gt;&amp;gt; import pymongo&amp;gt;&amp;gt;&amp;gt; import</p>
+           <p itemprop="description" >先说明我的需求, 其实也很简单, 我们的后台加一个提示功能, 有新订单到时在页面左下角进行提示, 并提供一个接口, 用于用户在app下单给api调
+tornado自身就有websocket的实现,有websocket的handler,直接拿来使用就可以了1234567891011</p>
         
     
-    <time datetime="2015-11-04T16:00:00.000Z" itemprop="datePublished">2015-11-05</time>
+    <time datetime="2015-11-11T17:02:42.000Z" itemprop="datePublished">2015-11-12</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/11/10/2015-11-10-python-lock-thread-and-thread_local/" title="Python的lock， thread, thread_local" itemprop="url">
+  
+    <h1 itemprop="name">Python的lock， thread, thread_local</h1>
+    
+     
+           <p itemprop="description" >首先是_thread.py文件，这里实现底层的线程的一些方法123456allocate =&amp;gt;获取锁get_ident =&amp;gt;获取当前线程的唯一标识符start_new_thread =&amp;gt;开启一个新线程# eg: 打印传入的参数和当前线程的唯一标识符import </p>
+        
+    
+    <time datetime="2015-11-10T03:30:00.000Z" itemprop="datePublished">2015-11-10</time>
   </a>
 </section>
 
@@ -82,7 +96,23 @@
     <h1 itemprop="name">MongoDB 3: Aggregate</h1>
     
      
-           <p itemprop="description" >mongo使用一种叫[BSON]的数据结构</p>
+           <p itemprop="description" >这里介绍一下mongo的聚集操作，这应该是在开发者角度，优于关系型数据库的地方，方便做一些稍微复杂点操作，mapreduce会另提出来讲。
+首先当然还是先生成一些随机数据接下来看例子先随机产生100条数据:collection名：col数据格式： grade(年级)， class</p>
+        
+    
+    <time datetime="2015-11-04T16:00:00.000Z" itemprop="datePublished">2015-11-05</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2015/11/05/2015-11-02-mongodb-2-crud-operations/" title="MongoDB 2: MongoDB的CRUD操作" itemprop="url">
+  
+    <h1 itemprop="name">MongoDB 2: MongoDB的CRUD操作</h1>
+    
+     
+           <p itemprop="description" >mongo使用一种叫[BSON]的数据结构
+做实验前先插入点数据12345678ligulfzhouMac-mini:~ ligulfzhou$ ~/py3venv/bin/python3&amp;gt;&amp;gt;&amp;gt; import pymongo&amp;gt;&amp;gt;&amp;gt; import</p>
         
     
     <time datetime="2015-11-04T16:00:00.000Z" itemprop="datePublished">2015-11-05</time>
@@ -100,20 +130,6 @@
         
     
     <time datetime="2015-11-03T16:00:00.000Z" itemprop="datePublished">2015-11-04</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2015/11/03/2016-03-04-python-metaclass/" title="Python的metaclass整理" itemprop="url">
-  
-    <h1 itemprop="name">Python的metaclass整理</h1>
-    
-     
-           <p itemprop="description" >这里自己整理了一下python的metaclass在python中，所有都是对象，基本类型变量是，数据类型(int, float…)也是，就算是class也是对象普通意义上的class，定义了该class实例的属性和方法， 而metaclass（即class的类），它定义了它的实</p>
-        
-    
-    <time datetime="2015-11-03T03:02:42.000Z" itemprop="datePublished">2015-11-03</time>
   </a>
 </section>
 
@@ -177,7 +193,7 @@
 	<p class="asidetitle">Categories</p>
 		<ul>
 		
-			<li><a href="/categories/MongoDB/" title="MongoDB">MongoDB<sup>5</sup></a></li>
+			<li><a href="/categories/MongoDB/" title="MongoDB">MongoDB<sup>6</sup></a></li>
 		
 			<li><a href="/categories/Python/" title="Python">Python<sup>10</sup></a></li>
 		
@@ -198,7 +214,11 @@
 		
 			<li><a href="/tags/MongoDB/" title="MongoDB">MongoDB<sup>5</sup></a></li>
 		
-			<li><a href="/tags/Python/" title="Python">Python<sup>10</sup></a></li>
+			<li><a href="/tags/MongoDB-todo/" title="MongoDB .....// todo">MongoDB .....// todo<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Python/" title="Python">Python<sup>9</sup></a></li>
+		
+			<li><a href="/tags/Python-metaclass/" title="Python, metaclass">Python, metaclass<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Shell/" title="Shell">Shell<sup>1</sup></a></li>
 		

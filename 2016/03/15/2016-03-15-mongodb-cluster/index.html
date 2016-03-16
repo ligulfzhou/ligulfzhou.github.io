@@ -1,0 +1,354 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>mongodb cluster | ligulfzhou</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Ligulfzhou">
+    
+    <meta name="description" content="这里自己整理了一下python的metaclass在python中，所有都是对象，基本类型变量是，数据类型(int, float…)也是，就算是class也是对象普通意义上的class，定义了该class实例的属性和方法， 而metaclass（即class的类），它定义了它的实例（class）以及">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="ligulfzhou">ligulfzhou</a></h1>
+				<h2 class="blog-motto">北漂小小程序猿</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:ligulfzhou.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/15/2016-03-15-mongodb-cluster/" title="mongodb cluster" itemprop="url">mongodb cluster</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://ligulfzhou.github.io" title="Ligulfzhou">Ligulfzhou</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-03-14T16:00:00.000Z" itemprop="datePublished">2016-03-15</time>
+    Updated:<time datetime="2016-03-16T02:21:13.000Z" itemprop="dateModified">2016-03-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+		</div>
+		
+		<p>这里自己整理了一下python的metaclass<br>在python中，所有都是对象，基本类型变量是，数据类型(int, float…)也是，就算是class也是对象<br>普通意义上的class，定义了该class实例的属性和方法， 而metaclass（即class的类），它定义了它的实例（class）以及它实例的实例（class的实例）的属性和方法</p>
+<p>python默认的metaclass是type</p>
+<p>首先介绍使用type来生成类<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class = type(name, bases, dict)</span><br><span class="line"># name: 类名， bases: 继承的基类， dict：属性</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; def echoAge(self):</span><br><span class="line">...   return self.age</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; A = type('A', (object, ), &#123;'age': 10, 'echoAge': echoAge&#125;)</span><br><span class="line">&gt;&gt;&gt; a = A()</span><br><span class="line">&gt;&gt;&gt; a.echoAge()</span><br><span class="line">10</span><br><span class="line">&gt;&gt;&gt; a.age</span><br><span class="line">10</span><br></pre></td></tr></table></figure></p>
+<p>现在真正以类的方式来实现metaclass<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; class Meta(type):</span><br><span class="line">...     def __new__(metacls, name, bases, dct):</span><br><span class="line">...             print("enter __new__: ", metacls, name, bases, dct)</span><br><span class="line">...             return super(Meta, metacls).__new__(metacls, name, bases, dct)</span><br><span class="line">...     def __init__(cls, name, bases, dct):</span><br><span class="line">...             print("enter __init__: ", cls, name, bases, dct)</span><br><span class="line">...             super(Meta, cls).__init__(name, bases, dct)</span><br><span class="line">...     def __call__(cls, *args, **kwargs):</span><br><span class="line">...             print('enter __call__: ', cls, *args, **kwargs)</span><br><span class="line">...             return super(Meta, cls).__call__(*args, **kwargs)</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; class A(object, metaclass=Meta):</span><br><span class="line">...     def echoAge(self):</span><br><span class="line">...             return 10</span><br><span class="line">...     age = 10</span><br><span class="line">...</span><br><span class="line">enter __new__:  &lt;class '__main__.Meta'&gt; A (&lt;class 'object'&gt;,) &#123;'__qualname__': 'A', '__module__': '__main__', 'echoAge': &lt;function A.echoAge at 0x1071f6a60&gt;, 'age': 10&#125;</span><br><span class="line">enter __init__:  &lt;class '__main__.A'&gt; A (&lt;class 'object'&gt;,) &#123;'__qualname__': 'A', '__module__': '__main__', 'echoAge': &lt;function A.echoAge at 0x1071f6a60&gt;, 'age': 10&#125;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">&gt;&gt;&gt; a = A()</span><br><span class="line">enter __call__:  &lt;class '__main__.A'&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Meta.<strong>new</strong>在生成A的对象时被调用，在调用return super(Meta, metacls).<strong>new</strong>(metacls, name, bases, dct)前，可对A做修改， 如增加/修改A的属性或方法<br>Meta.<strong>init</strong>在生成A对象后进行初始化时被调用， 可直接对生成的对象A做修改，如增加/修改A的属性或方法<br>Meta.<strong>call</strong>在A（作为类）实例化时被调用（用metaclass来实现单例模式时就是在这里做文章）</p>
+<p>实现将类的方法名，属性都改成大写的<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Meta</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(metacls, name, bases, dct)</span>:</span></span><br><span class="line">        mydct = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> k, v <span class="keyword">in</span> dct.items():</span><br><span class="line">            mydct.update(&#123;k.upper(): v&#125;)</span><br><span class="line">        <span class="keyword">return</span> super(Meta, metacls).__new__(metacls, name, bases, mydct)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object, metaclass=Meta)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lower</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'lower'</span></span><br><span class="line">    lowercase = <span class="string">'lowercase'</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = A()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.LOWER()</span><br><span class="line"><span class="string">'lower'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.LOWERCASE</span><br><span class="line"><span class="string">'lowercase'</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>或者改写<strong>init</strong>方法来实现加一些方法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upper</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'upper'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Meta</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(cls, name, bases, dct)</span>:</span></span><br><span class="line">        super(Meta, cls).__init__(name, bases, dct)    </span><br><span class="line">        cls.upper = upper</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object, metaclass=Meta)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lower</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">'lower'</span></span><br><span class="line"></span><br><span class="line">a = A()</span><br><span class="line">a.upper()  ;<span class="string">'upper'</span></span><br><span class="line">a.lower()  ;<span class="string">'lower'</span></span><br></pre></td></tr></table></figure></p>
+<p>改写<strong>call</strong>方法实现单例[类实例化时会调用<strong>call</strong>]<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span><span class="params">(type)</span>:</span></span><br><span class="line">    instance = <span class="keyword">None</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(cls, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> cls.instance:</span><br><span class="line">            cls.instance = super(Singleton, cls).__call__(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> cls.instance</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span><span class="params">(object, metaclass=Singleton)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">a = Test()</span><br><span class="line">b = Test()</span><br><span class="line">print(id(a) == id(b))  <span class="comment">#True</span></span><br></pre></td></tr></table></figure></p>
+<p>参考： <a href="http://eli.thegreenplace.net/2011/08/14/python-metaclasses-by-example" target="_blank" rel="external">http://eli.thegreenplace.net/2011/08/14/python-metaclasses-by-example</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MongoDB-todo/">MongoDB .....// todo</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MongoDB/">MongoDB</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://ligulfzhou.github.io/2016/03/15/2016-03-15-mongodb-cluster/" data-title="mongodb cluster | ligulfzhou" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/03/04/2016-03-04-python-metaclass/"  title="Python的metaclass整理">
+ <strong>NEXT:</strong><br/> 
+ <span>Python的metaclass整理
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/MongoDB/" title="MongoDB">MongoDB<sup>6</sup></a></li>
+		
+			<li><a href="/categories/Python/" title="Python">Python<sup>10</sup></a></li>
+		
+			<li><a href="/categories/Shell/" title="Shell">Shell<sup>1</sup></a></li>
+		
+			<li><a href="/categories/杂谈/" title="杂谈">杂谈<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Logging/" title="Logging">Logging<sup>1</sup></a></li>
+		
+			<li><a href="/tags/MongoDB/" title="MongoDB">MongoDB<sup>5</sup></a></li>
+		
+			<li><a href="/tags/MongoDB-todo/" title="MongoDB .....// todo">MongoDB .....// todo<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Python/" title="Python">Python<sup>9</sup></a></li>
+		
+			<li><a href="/tags/Python-metaclass/" title="Python, metaclass">Python, metaclass<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Shell/" title="Shell">Shell<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Tornado/" title="Tornado">Tornado<sup>3</sup></a></li>
+		
+			<li><a href="/tags/functional-programming/" title="functional programming">functional programming<sup>2</sup></a></li>
+		
+			<li><a href="/tags/qrcode/" title="qrcode">qrcode<sup>1</sup></a></li>
+		
+			<li><a href="/tags/thread/" title="thread">thread<sup>1</sup></a></li>
+		
+			<li><a href="/tags/websocket/" title="websocket">websocket<sup>1</sup></a></li>
+		
+			<li><a href="/tags/杂谈/" title="杂谈">杂谈<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://ligulfzhou.github.io" target="_blank" title="Ligulfzhou">Ligulfzhou</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"ligulfzhou"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

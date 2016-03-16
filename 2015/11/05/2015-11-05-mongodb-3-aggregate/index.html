@@ -9,7 +9,8 @@
     
     <meta name="author" content="Ligulfzhou">
     
-    <meta name="description" content="mongo使用一种叫[BSON]的数据结构">
+    <meta name="description" content="这里介绍一下mongo的聚集操作，这应该是在开发者角度，优于关系型数据库的地方，方便做一些稍微复杂点操作，mapreduce会另提出来讲。
+首先当然还是先生成一些随机数据接下来看例子先随机产生100条数据:collection名：col数据格式： grade(年级)， class(班级)，sex(性">
     
     
     
@@ -73,7 +74,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-11-04T16:00:00.000Z" itemprop="datePublished">2015-11-05</time>
-    Updated:<time datetime="2016-03-08T08:57:04.000Z" itemprop="dateModified">2016-03-08</time>
+    Updated:<time datetime="2016-03-16T03:18:40.000Z" itemprop="dateModified">2016-03-16</time>
     
   </p>
 </header>
@@ -85,7 +86,12 @@
 		
 		</div>
 		
-		<p>mongo使用一种叫[BSON]的数据结构</p>
+		<p>这里介绍一下mongo的聚集操作，这应该是在开发者角度，优于关系型数据库的地方，方便做一些稍微复杂点操作，mapreduce会另提出来讲。</p>
+<p>首先当然还是先生成一些随机数据<br>接下来看例子<br>先随机产生100条数据:<br>collection名：col<br>数据格式： grade(年级)， class(班级)，sex(性别), age(年龄)， point(分数)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ ~/py35env/bin/python</span><br><span class="line">Python <span class="number">3.5</span><span class="number">.1</span> (default, Dec <span class="number">30</span> <span class="number">2015</span>, <span class="number">23</span>:<span class="number">37</span>:<span class="number">24</span>)</span><br><span class="line">[GCC <span class="number">4.2</span><span class="number">.1</span> Compatible Apple LLVM <span class="number">7.0</span><span class="number">.2</span> (clang<span class="number">-700.1</span><span class="number">.81</span>)] on darwin</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> <span class="keyword">or</span> <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> pymongo</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> random</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>db = pymongo.MongoClient(<span class="string">'127.0.0.1:27017'</span>).youcai</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line"><span class="meta">... </span>  col = &#123;<span class="string">'grade'</span>: random.randint(<span class="number">1</span>, <span class="number">6</span>), <span class="string">'class'</span>: random.randint(<span class="number">1</span>,<span class="number">3</span>), <span class="string">'age'</span>: random.randint(<span class="number">10</span>, <span class="number">20</span>), <span class="string">'point'</span>: random.randint(<span class="number">60</span>, <span class="number">100</span>), <span class="string">'sex'</span>: random.randint(<span class="number">0</span>,<span class="number">1</span>)&#125;</span><br><span class="line"><span class="meta">... </span>  db.col.insert(col)</span><br><span class="line">这里存了<span class="number">100</span>条数据，年级<span class="number">1</span><span class="number">-6</span>， 班级<span class="number">1</span><span class="number">-3</span>， 年龄<span class="number">10</span><span class="number">-20</span>， 份数<span class="number">60</span><span class="number">-100</span>， sex：<span class="number">0</span>/<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>首先，先测试简单功能的聚集（Single Purpose Aggregation Operations）<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mongo</span><br><span class="line">MongoDB shell version: 3.2.0</span><br><span class="line">connecting to: test</span><br><span class="line">&gt; use youcai</span><br><span class="line">switched to db youcai</span><br><span class="line">&gt; db.col.count()      # count: 总人数 </span><br><span class="line">100</span><br><span class="line">&gt; db.col.count(&#123;'class': 2&#125;)    # count:  二班的人数</span><br><span class="line">41</span><br><span class="line"></span><br><span class="line">&gt; db.col.distinct('point')    # distinct: 有哪些分值</span><br><span class="line">db.col.distinct('point')</span><br><span class="line">[ 63, 75, 97, 64, 87, 84, 82, 77, 96, 62, 71, 66, 83, 68, 74, 91, 69, 80, 78, 61, 60, 81, 94, 73, 65, 89, 95, 90, 67, 100, 79, 86, 99, 72, 85, 88, 76, 92, 98 ]</span><br><span class="line"></span><br><span class="line">&gt; # 注：其他命令待加</span><br></pre></td></tr></table></figure></p>
+<p>聚集管道（aggregate pipeline）<br>注：暂时就先记录自己常用的，<strong><em>其他命令待加</em></strong><br>聚集管道，用我的话来说，就是一层一层的过滤和操作</p>
+<p>比如，我要知道年级是1，2的最高的10个分数的各班总分（虽然比较绕口，也没什么意思）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">先做筛选：	</span><br><span class="line">年级是<span class="number">1</span>， <span class="number">2</span>  &#123;<span class="string">'$match'</span>: &#123;<span class="string">'grade'</span>: &#123;<span class="string">'$in'</span>: [<span class="number">1</span>, <span class="number">2</span>]&#125;&#125;&#125;</span><br><span class="line">按分数倒序：	&#123;<span class="string">'$sort'</span>: &#123;<span class="string">'point'</span>: <span class="number">-1</span>&#125;&#125;</span><br><span class="line">如果想让同分年级大的放前面：  &#123;<span class="string">'$sort'</span>: &#123;<span class="string">'point'</span>: <span class="number">-1</span>, <span class="string">'grade'</span>: <span class="number">-1</span>&#125;&#125;</span><br><span class="line">只要前<span class="number">10</span>个： 	&#123;<span class="string">'$limit'</span>: <span class="number">10</span>&#125;</span><br><span class="line">所以总的筛选条件是: db.col.aggregate([&#123;<span class="string">'$match'</span>: &#123;<span class="string">'grade'</span>: &#123;<span class="string">'$in'</span>: [<span class="number">1</span>, <span class="number">2</span>]&#125;&#125;&#125;, &#123;<span class="string">'$sort'</span>: &#123;<span class="string">'point'</span>: <span class="number">-1</span>, <span class="string">'grade'</span>: <span class="number">-1</span>&#125;&#125;, &#123;<span class="string">'$limit'</span>: <span class="number">10</span>&#125;])</span><br><span class="line"></span><br><span class="line">然后是计算总分，对grade进行聚集，然后求point的总和</span><br><span class="line">&#123;<span class="string">'$group'</span>: &#123;<span class="string">'_id'</span>: <span class="string">'$grade'</span>, <span class="string">'total'</span>: &#123;<span class="string">'$sum'</span>: <span class="string">'$point'</span>&#125;&#125;&#125;</span><br><span class="line"></span><br><span class="line">汇总：db.col.aggregate([</span><br><span class="line">	&#123;<span class="string">'$match'</span>: &#123;<span class="string">'grade'</span>: &#123;<span class="string">'$in'</span>: [<span class="number">1</span>, <span class="number">2</span>]&#125;&#125;&#125;, </span><br><span class="line">	&#123;<span class="string">'$sort'</span>: &#123;<span class="string">'point'</span>: <span class="number">-1</span>, <span class="string">'grade'</span>: <span class="number">-1</span>&#125;&#125;, </span><br><span class="line">	&#123;<span class="string">'$limit'</span>: <span class="number">10</span>&#125;, </span><br><span class="line">	&#123;<span class="string">'$group'</span>: &#123;<span class="string">'_id'</span>: <span class="string">'$grade'</span>, <span class="string">'total'</span>: &#123;<span class="string">'$sum'</span>: <span class="string">'$point'</span>&#125;&#125;&#125;])</span><br></pre></td></tr></table></figure></p>
+<p>结果：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.col.aggregate([&#123;'$match': &#123;'grade': &#123;'$in': [1, 2]&#125;&#125;&#125;, &#123;'$sort': &#123;'point': -1, 'grade': -1&#125;&#125;, &#123;'$limit': 10&#125;, &#123;'$group': &#123;'_id': '$grade', 'total': &#123;'$sum': '$point'&#125;&#125;&#125;])</span><br><span class="line">&#123; "_id" : 2, "total" : 186 &#125;</span><br><span class="line">&#123; "_id" : 1, "total" : 770 &#125;</span><br><span class="line"># 所以答案就是1年级的总分770， 2年级的总分186</span><br></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -115,18 +121,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/11/05/2015-11-02-mongodb-2-crud-operations/" title="MongoDB 2: MongoDB的CRUD操作">
+ <a href="/2015/11/10/2015-11-10-python-lock-thread-and-thread_local/" title="Python的lock， thread, thread_local">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  MongoDB 2: MongoDB的CRUD操作</span>
+  Python的lock， thread, thread_local</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/11/04/2015-11-04-simple-logging-handler/"  title="使用logging库建简单的日志记录">
+<a href="/2015/11/05/2015-11-02-mongodb-2-crud-operations/"  title="MongoDB 2: MongoDB的CRUD操作">
  <strong>NEXT:</strong><br/> 
- <span>使用logging库建简单的日志记录
+ <span>MongoDB 2: MongoDB的CRUD操作
 </span>
 </a>
 </div>
@@ -155,7 +161,7 @@
 	<p class="asidetitle">Categories</p>
 		<ul>
 		
-			<li><a href="/categories/MongoDB/" title="MongoDB">MongoDB<sup>5</sup></a></li>
+			<li><a href="/categories/MongoDB/" title="MongoDB">MongoDB<sup>6</sup></a></li>
 		
 			<li><a href="/categories/Python/" title="Python">Python<sup>10</sup></a></li>
 		
@@ -176,7 +182,11 @@
 		
 			<li><a href="/tags/MongoDB/" title="MongoDB">MongoDB<sup>5</sup></a></li>
 		
-			<li><a href="/tags/Python/" title="Python">Python<sup>10</sup></a></li>
+			<li><a href="/tags/MongoDB-todo/" title="MongoDB .....// todo">MongoDB .....// todo<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Python/" title="Python">Python<sup>9</sup></a></li>
+		
+			<li><a href="/tags/Python-metaclass/" title="Python, metaclass">Python, metaclass<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Shell/" title="Shell">Shell<sup>1</sup></a></li>
 		
