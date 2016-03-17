@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Python获取参数 | ligulfzhou</title>
+    <title>tornado， motor报错yielded unknown object MotorAggregationCursor | ligulfzhou</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Ligulfzhou">
     
-    <meta name="description" content="Python作为单独脚本运行，从调用者方传递参数应该是不可或缺的一个需要。比如求两个参数的和：1234567891011#!/usr/bin/env python3import sysdef add(x, y):    return x + y    if __name__ == &#39;__main__">
+    <meta name="description" content="[据说这么起标题，更容易拉来访问量…]
+motor是tornado对MongoDB的异步的库, 0.5版本之前使用聚集操作时，可以直接使用yield关键字，像这样，cols = yield db.col.aggregate([{..}, {..}]), 但升级库到0.5之后，将会报yielded u">
     
     
     
@@ -65,15 +66,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/03/2015-11-03-python-scripts-args/" title="Python获取参数" itemprop="url">Python获取参数</a>
+      <a href="/2015/12/20/2015-12-20-yielded-unknown-object-MotorAggregationCursor/" title="tornado， motor报错yielded unknown object MotorAggregationCursor" itemprop="url">tornado， motor报错yielded unknown object MotorAggregationCursor</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://ligulfzhou.github.io" title="Ligulfzhou">Ligulfzhou</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-11-03T03:02:42.000Z" itemprop="datePublished">2015-11-03</time>
-    更新日期:<time datetime="2016-03-08T08:57:04.000Z" itemprop="dateModified">2016-03-08</time>
+    <time datetime="2015-12-19T16:00:00.000Z" itemprop="datePublished">2015-12-20</time>
+    更新日期:<time datetime="2016-03-17T05:51:48.000Z" itemprop="dateModified">2016-03-17</time>
     
   </p>
 </header>
@@ -85,28 +86,28 @@
 		
 		</div>
 		
-		<p>Python作为单独脚本运行，从调用者方传递参数应该是不可或缺的一个需要。比如求两个参数的和：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    x, y = sys.argv[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line">    print(add(int(x), int(y)))</span><br><span class="line"></span><br><span class="line">python3 args.py <span class="number">1</span> <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
-<p>另一种是使用argparse库，当然它比这里写的功能有用多了<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line">add = <span class="keyword">lambda</span> x, y: x + y</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'--x'</span>, type=int, help=help)</span><br><span class="line">parser.add_argument(<span class="string">'--y'</span>,  type=int, help=help)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    x, y = args.x, args.y</span><br><span class="line">    print(add(x, y))</span><br><span class="line"></span><br><span class="line">python3 args.py --x=<span class="number">1</span> --y=<span class="number">2</span></span><br></pre></td></tr></table></figure></p>
-  
+		<p>[据说这么起标题，更容易拉来访问量…]</p>
+<p>motor是tornado对MongoDB的异步的库, 0.5版本之前使用聚集操作时，可以直接使用yield关键字，像这样，cols = yield db.col.aggregate([{..}, {..}]), 但升级库到0.5之后，将会报yielded unknown object MotorAggregationCursor的错误<br>解决方式直接看代码吧</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ ~/py35env/bin/python</span><br><span class="line">Python <span class="number">3.5</span><span class="number">.1</span> (default, Dec <span class="number">30</span> <span class="number">2015</span>, <span class="number">23</span>:<span class="number">37</span>:<span class="number">24</span>)</span><br><span class="line">[GCC <span class="number">4.2</span><span class="number">.1</span> Compatible Apple LLVM <span class="number">7.0</span><span class="number">.2</span> (clang<span class="number">-700.1</span><span class="number">.81</span>)] on darwin</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> <span class="keyword">or</span> <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> motor</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>youcai = motor.MotorClient(<span class="string">'127.0.0.1:27017'</span>).youcai</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> tornado.gen <span class="keyword">import</span> coroutine</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> tornado.ioloop <span class="keyword">import</span> IOLoop</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>@coroutine</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">wrong_way</span><span class="params">()</span>:</span></span><br><span class="line"><span class="meta">... </span>  cols = <span class="keyword">yield</span> youcai.col.aggregate([&#123;<span class="string">'$match'</span>: &#123;<span class="string">'point'</span>: <span class="number">65</span>&#125;&#125;, &#123;<span class="string">'$group'</span>: &#123;<span class="string">'_id'</span>: <span class="string">'$age'</span>&#125;&#125;])</span><br><span class="line"><span class="meta">... </span>  <span class="keyword">return</span> cols</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>@coroutine</span><br><span class="line"><span class="meta">... </span><span class="function"><span class="keyword">def</span> <span class="title">correct_way</span><span class="params">()</span>:</span></span><br><span class="line"><span class="meta">... </span>  cols = []</span><br><span class="line"><span class="meta">... </span>  ret = youcai.col.aggregate([&#123;<span class="string">'$match'</span>: &#123;<span class="string">'point'</span>: <span class="number">65</span>&#125;&#125;, &#123;<span class="string">'$group'</span>: &#123;<span class="string">'_id'</span>: <span class="string">'$age'</span>&#125;&#125;])</span><br><span class="line"><span class="meta">... </span>  <span class="keyword">while</span>(<span class="keyword">yield</span> ret.fetch_next):</span><br><span class="line"><span class="meta">... </span>    doc = ret.next_object()</span><br><span class="line"><span class="meta">... </span>    cols.append(doc)</span><br><span class="line"><span class="meta">... </span>  <span class="keyword">return</span> cols</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>IOLoop.current().run_sync(wrong_way)  <span class="comment">#保错 yielded unknown object MotorAggregationCursor</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>IOLoop.current().run_sync(correct_way)</span><br><span class="line">[&#123;<span class="string">'_id'</span>: <span class="number">17</span>&#125;, &#123;<span class="string">'_id'</span>: <span class="number">14</span>&#125;]     <span class="comment"># 正确姿势， 获得结果</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Python/">Python</a>
+  <span></span> <a href="/tags/Tornado/">Tornado</a><a href="/tags/MongoDB/">MongoDB</a><a href="/tags/Motor/">Motor</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Python/">Python</a>
+  <a class="article-category-link" href="/categories/MongoDB-Python/">MongoDB, Python</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://ligulfzhou.github.io/2015/11/03/2015-11-03-python-scripts-args/" data-title="Python获取参数 | ligulfzhou" data-tsina="null" class="share clearfix">
+  <div data-url="http://ligulfzhou.github.io/2015/12/20/2015-12-20-yielded-unknown-object-MotorAggregationCursor/" data-title="tornado， motor报错yielded unknown object MotorAggregationCursor | ligulfzhou" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -116,18 +117,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/11/04/2015-11-04-simple-logging-handler/" title="使用logging库建简单的日志记录">
+ <a href="/2016/01/17/2016-1-17-useful-snippet-for-tornado/" title="几个对tornado有用的snippets">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  使用logging库建简单的日志记录</span>
+  几个对tornado有用的snippets</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/11/02/2015-11-02-install-mongodb/"  title="MongoDB 1: 安装MongoDB">
+<a href="/2015/12/05/2015-12-05-simple-shell-to-synchronize-server-for-developing-to-local-mongodb/"  title="用于同步数据库到本地的小脚本">
  <strong>NEXT:</strong><br/> 
- <span>MongoDB 1: 安装MongoDB
+ <span>用于同步数据库到本地的小脚本
 </span>
 </a>
 </div>
