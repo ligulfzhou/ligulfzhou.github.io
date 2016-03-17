@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>MongoDB 1: 安装MongoDB | ligulfzhou</title>
+    <title>使用PIL拼图 | ligulfzhou</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Ligulfzhou">
     
-    <meta name="description" content="以ubuntu为例,安装MongoDB1234567891 导入mongodb的共有gpg keysudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB102 添加/etc/apt/sources.list.d">
+    <meta name="description" content="昨天加入了apple developer program, 是的, 你没有看错， 就是它，自己准备开发ios app了， 自己只是接触了点oc和swift， 能写写简单的代码，期待一个月内将自己的第一款app发布。
+支付了$99之后，说不能认证我的用户真实身份，需要再上传government-iss">
     
     
     
@@ -65,15 +66,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/02/2015-11-02-install-mongodb/" title="MongoDB 1: 安装MongoDB" itemprop="url">MongoDB 1: 安装MongoDB</a>
+      <a href="/2016/03/16/2016-03-17-merge-images-with-PIL/" title="使用PIL拼图" itemprop="url">使用PIL拼图</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://ligulfzhou.github.io" title="Ligulfzhou">Ligulfzhou</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-11-01T16:00:00.000Z" itemprop="datePublished">2015-11-02</time>
-    Updated:<time datetime="2016-03-17T05:51:47.000Z" itemprop="dateModified">2016-03-17</time>
+    <time datetime="2016-03-15T16:00:00.000Z" itemprop="datePublished">2016-03-16</time>
+    Updated:<time datetime="2016-03-17T10:17:11.000Z" itemprop="dateModified">2016-03-17</time>
     
   </p>
 </header>
@@ -85,30 +86,29 @@
 		
 		</div>
 		
-		<p>以ubuntu为例,安装MongoDB<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1 导入mongodb的共有gpg key</span><br><span class="line">sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10</span><br><span class="line"></span><br><span class="line">2 添加/etc/apt/sources.list.d/mongodb-org-3.0.list</span><br><span class="line">echo &quot;deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse&quot; | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list</span><br><span class="line"></span><br><span class="line">3 升级并安装</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y mongodb-org</span><br></pre></td></tr></table></figure></p>
-<p>运行MongoDB<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service mongodb start</span><br></pre></td></tr></table></figure></p>
-<p>mongodb默认将数据存放于/var/lib/mongodb目录下,日志文件存放在/var/log/mongodb目录下,以mongodb用户运行mongodb,可以设置/etc/mongod.conf来设置</p>
-<p>卸载MongoDB<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1 关闭mongodb</span><br><span class="line">sudo service mongodb stop</span><br><span class="line"></span><br><span class="line">2 删除软件包</span><br><span class="line">sudo apt-get purge mongodb-org-*</span><br><span class="line"></span><br><span class="line">3 删除数据和日志</span><br><span class="line">sudo rm -r /var/log/mongodb</span><br><span class="line">sudo rm -r /var/lib/mongodb</span><br></pre></td></tr></table></figure></p>
+		<p>昨天加入了apple developer program, 是的, 你没有看错， 就是它，自己准备开发ios app了， 自己只是接触了点oc和swift， 能写写简单的代码，期待一个月内将自己的第一款app发布。</p>
+<p>支付了$99之后，说不能认证我的用户真实身份，需要再上传government-issued photo id（即身份证），需要正反面…明明要求要将多份图片拼在一起再上传，自己网页上却显示有三个上传控件…感觉很逗逼…</p>
+<p>这里，我就简单的使用python的PIL模块来讲身份证的正反图片拼在一起， 直接上代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ cd Desktop</span><br><span class="line">➜  Desktop ls idcard_*      </span><br><span class="line">idcard_back.png  idcard_front.png    <span class="comment">#在desktop目录放这正反面的图片</span></span><br><span class="line">➜  Desktop ~/py35env/bin/python</span><br><span class="line">Python <span class="number">3.5</span><span class="number">.1</span> (default, Dec <span class="number">30</span> <span class="number">2015</span>, <span class="number">23</span>:<span class="number">37</span>:<span class="number">24</span>)</span><br><span class="line">[GCC <span class="number">4.2</span><span class="number">.1</span> Compatible Apple LLVM <span class="number">7.0</span><span class="number">.2</span> (clang<span class="number">-700.1</span><span class="number">.81</span>)] on darwin</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> <span class="keyword">or</span> <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>width, height = <span class="number">0</span>, <span class="number">0</span>  <span class="comment"># 计算出最终图片的大小</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>image_list = []  <span class="comment"># 记录打开的图片</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> idx, img <span class="keyword">in</span> enumerate(img_name_list):</span><br><span class="line"><span class="meta">... </span>  im = Image.open(img_name_list[idx])</span><br><span class="line"><span class="meta">... </span>  image_list.append(im)</span><br><span class="line"><span class="meta">... </span>  w, h = im.size</span><br><span class="line"><span class="meta">... </span>  <span class="keyword">if</span> w &gt; width:  <span class="comment"># 我直接将图片从上到下拼，生成的图片宽度为最宽的一张</span></span><br><span class="line"><span class="meta">... </span>    width = w</span><br><span class="line"><span class="meta">... </span>  height += h    <span class="comment"># 高度当然是所有图片的高度累加</span></span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>merged_image = Image.new(<span class="string">'RGB'</span>, (width, height))  <span class="comment"># 用计算出来的宽高建一张图片</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cur_y_pos = <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> item <span class="keyword">in</span> image_list:    <span class="comment"># 把原先打开的图片一张张贴到新建的图片里， 别贴错位置了</span></span><br><span class="line"><span class="meta">... </span>  merged_image.paste(item, (<span class="number">0</span>, cur_y_pos))</span><br><span class="line"><span class="meta">... </span>  cur_y_pos += item.size[<span class="number">1</span>]</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>merged_image.save(<span class="string">'idcard.png'</span>)  <span class="comment"># 最后一步当然是保存了</span></span><br></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/MongoDB/">MongoDB</a>
+  <span></span> <a href="/tags/Python/">Python</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/MongoDB/">MongoDB</a>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://ligulfzhou.github.io/2015/11/02/2015-11-02-install-mongodb/" data-title="MongoDB 1: 安装MongoDB | ligulfzhou" data-tsina="null" class="share clearfix">
+  <div data-url="http://ligulfzhou.github.io/2016/03/16/2016-03-17-merge-images-with-PIL/" data-title="使用PIL拼图 | ligulfzhou" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -117,19 +117,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/11/03/2015-11-03-python-scripts-args/" title="Python获取参数">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  Python获取参数</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/09/12/2015-09-12-tornado-implement-rest-api/"  title="使用tornado来实现rest api">
+<a href="/2016/03/15/2016-03-15-mongodb-cluster/"  title="mongodb cluster">
  <strong>NEXT:</strong><br/> 
- <span>使用tornado来实现rest api
+ <span>mongodb cluster
 </span>
 </a>
 </div>
