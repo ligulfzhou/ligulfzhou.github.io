@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Python获取参数 | ligulfzhou</title>
+    <title>pptpd with freeradius | ligulfzhou</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Ligulfzhou">
     
-    <meta name="description" content="Python作为单独脚本运行，从调用者方传递参数应该是不可或缺的一个需要。比如求两个参数的和：1234567891011#!/usr/bin/env python3import sysdef add(x, y):    return x + y    if __name__ == &#39;__main__">
+    <meta name="description" content="在学校里就一直有租服务器架vpn的习惯，一般都租个半年或一年的vps，搭个pptp vpn，并分享给同学一起使用。现在这台低配的buyvm openvz服务器，就架着pptp，然后又10人再使用。也是相当的物超所值。
+这台半年的月底就到期了，又新租了一台一年的，并尝试了一下freeradius.（让">
     
     
     
@@ -65,15 +66,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/03/2015-11-03-python-scripts-args/" title="Python获取参数" itemprop="url">Python获取参数</a>
+      <a href="/2016/03/26/2016-03-20-pptpd-with-freeradius/" title="pptpd with freeradius" itemprop="url">pptpd with freeradius</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://ligulfzhou.github.io" title="Ligulfzhou">Ligulfzhou</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-11-03T03:02:42.000Z" itemprop="datePublished">2015-11-03</time>
-    Updated:<time datetime="2016-03-08T08:57:04.000Z" itemprop="dateModified">2016-03-08</time>
+    <time datetime="2016-03-25T16:00:00.000Z" itemprop="datePublished">2016-03-26</time>
+    Updated:<time datetime="2016-03-26T06:55:57.000Z" itemprop="dateModified">2016-03-26</time>
     
   </p>
 </header>
@@ -85,28 +86,34 @@
 		
 		</div>
 		
-		<p>Python作为单独脚本运行，从调用者方传递参数应该是不可或缺的一个需要。比如求两个参数的和：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x + y</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    x, y = sys.argv[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line">    print(add(int(x), int(y)))</span><br><span class="line"></span><br><span class="line">python3 args.py <span class="number">1</span> <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
-<p>另一种是使用argparse库，当然它比这里写的功能有用多了<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line">add = <span class="keyword">lambda</span> x, y: x + y</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'--x'</span>, type=int, help=help)</span><br><span class="line">parser.add_argument(<span class="string">'--y'</span>,  type=int, help=help)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    x, y = args.x, args.y</span><br><span class="line">    print(add(x, y))</span><br><span class="line"></span><br><span class="line">python3 args.py --x=<span class="number">1</span> --y=<span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+		<p>在学校里就一直有租服务器架vpn的习惯，一般都租个半年或一年的vps，搭个pptp vpn，并分享给同学一起使用。现在这台低配的buyvm openvz服务器，就架着pptp，然后又10人再使用。也是相当的物超所值。</p>
+<p>这台半年的月底就到期了，又新租了一台一年的，并尝试了一下freeradius.（让pptp vpn的用户信息不用直接明文写在/etc/ppp/chap-secrets文件中，而且由freeradius来处理，账号信息可以存在数据库中，由freeradius去获取和验证）</p>
+<p>安装教程太多，我就直接说一下自己的安装的选择. 我参考了(这个)[<a href="http://blog.csdn.net/alonesword/article/details/19506217]和(这个)[http://www.cnblogs.com/klobohyz/archive/2012/02/04/2338675.html" target="_blank" rel="external">http://blog.csdn.net/alonesword/article/details/19506217]和(这个)[http://www.cnblogs.com/klobohyz/archive/2012/02/04/2338675.html</a>]</p>
+<p>服务器的系统是ubuntu 14.04. freeradius版本直接apt-get install freeradius，系统的freeradius还是2点几，虽然官网上说1.x和2.x都已经EOL（end of life）了， 让你升级到3.x…（尝试了一下没成功，但是2.x的一遍就O了）</p>
+<p>freeradius client是源码编译的1.1.7版本</p>
+<p>最后的最后，有个问题没找到答案的, 日志的报错信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Plugin /usr/lib/pppd/2.4.5/radius.so loaded.</span><br><span class="line">RADIUS plugin initialized.</span><br><span class="line">Plugin /usr/lib/pppd/2.4.5/radattr.so loaded.</span><br><span class="line">RADATTR plugin initialized.</span><br><span class="line">Using interface ppp0</span><br><span class="line">Connect: ppp0 &lt;--&gt; /dev/pts/1</span><br><span class="line">rc_read_dictionary: invalid type on line 92 of dictionary /usr/local/etc/radiusclient/dictionary</span><br><span class="line">RADIUS: Can&apos;t read dictionary file /usr/local/etc/radiusclient/dictionary</span><br><span class="line">Peer ligulfzhou failed CHAP authentication</span><br><span class="line">Hangup (SIGHUP)</span><br><span class="line">Modem hangup</span><br><span class="line">Connection terminated.</span><br></pre></td></tr></table></figure></p>
+<p>是freeradius client的配置信息**行有问题，直接注释掉，然后报错，再注释…然后就可以用了…</p>
+<p>差不多是个流水账，中间有挺多问题，但都通过搜索找到了解决，也就最后没找到，蛋筒多比较二逼的方式解决了</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Python/">Python</a>
+  <span></span> <a href="/tags/pptpd/">pptpd</a><a href="/tags/freeradius/">freeradius</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Python/">Python</a>
+  <a class="article-category-link" href="/categories/pptpd/">pptpd</a>►<a class="article-category-link" href="/categories/pptpd/freeradius/">freeradius</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://ligulfzhou.github.io/2015/11/03/2015-11-03-python-scripts-args/" data-title="Python获取参数 | ligulfzhou" data-tsina="null" class="share clearfix">
+  <div data-url="http://ligulfzhou.github.io/2016/03/26/2016-03-20-pptpd-with-freeradius/" data-title="pptpd with freeradius | ligulfzhou" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -116,18 +123,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/11/04/2015-11-04-simple-logging-handler/" title="使用logging库建简单的日志记录">
+ <a href="/2016/03/26/2016-03-26-shell-snippet-for-app-developer/" title="给app开发人员写的shell脚本">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  使用logging库建简单的日志记录</span>
+  给app开发人员写的shell脚本</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/11/02/2015-11-02-install-mongodb/"  title="MongoDB 1: 安装MongoDB">
+<a href="/2016/03/25/2016-03-25-tornado-put-functions-to-template/"  title="tornado中加函数传递到模板引擎的正确方式">
  <strong>NEXT:</strong><br/> 
- <span>MongoDB 1: 安装MongoDB
+ <span>tornado中加函数传递到模板引擎的正确方式
 </span>
 </a>
 </div>
