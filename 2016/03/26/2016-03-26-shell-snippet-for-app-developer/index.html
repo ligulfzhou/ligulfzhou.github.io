@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>用于同步数据库到本地的小脚本 | ligulfzhou</title>
+    <title>给app开发人员写的shell脚本 | ligulfzhou</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Ligulfzhou">
     
-    <meta name="description" content="原先公司内网里有一台服务器做测试使用, 而且我还用这windows的本子, 也不好装redis(虽然不支持, 其实还是可以装的).
-后来自己买了mac之后, 开发可以完全在本机进行了. 但是一直处于持续开发阶段, 经常改数据, 加表等, 将线上服务器的数据同步到测试上, 为了不用经常手动将测试服务器">
+    <meta name="description" content="公司的app的3.0版本正等着上线，app的调试当然和我无关。但是一报错就喊我，然后我还得ssh连到测试服务器，然后让他们重新做一下操作，我号查看报错信息
+然后我就给公司里的app开发人员写了很短的脚本，当然都称不上啥脚本，至少方便了我，也方便了他们。
+123ssh ***@192.168.1.10">
     
     
     
@@ -66,15 +67,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/12/05/2015-12-05-simple-shell-to-synchronize-server-for-developing-to-local-mongodb/" title="用于同步数据库到本地的小脚本" itemprop="url">用于同步数据库到本地的小脚本</a>
+      <a href="/2016/03/26/2016-03-26-shell-snippet-for-app-developer/" title="给app开发人员写的shell脚本" itemprop="url">给app开发人员写的shell脚本</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://ligulfzhou.github.io" title="Ligulfzhou">Ligulfzhou</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-12-04T16:00:00.000Z" itemprop="datePublished">2015-12-05</time>
-    Updated:<time datetime="2016-03-10T05:25:14.000Z" itemprop="dateModified">2016-03-10</time>
+    <time datetime="2016-03-25T16:00:00.000Z" itemprop="datePublished">2016-03-26</time>
+    Updated:<time datetime="2016-03-26T06:24:39.000Z" itemprop="dateModified">2016-03-26</time>
     
   </p>
 </header>
@@ -86,19 +87,19 @@
 		
 		</div>
 		
-		<p>原先公司内网里有一台服务器做测试使用, 而且我还用这windows的本子, 也不好装redis(虽然不支持, 其实还是可以装的).</p>
-<p>后来自己买了mac之后, 开发可以完全在本机进行了. 但是一直处于持续开发阶段, 经常改数据, 加表等, 将线上服务器的数据同步到测试上, 为了不用经常手动将测试服务器上的数据同步到自己的机器上, 所以写了一个小脚本来同步数据.</p>
-<p>#1. 使本机无需密码登陆测试服务器<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ligulfzhous-MacBook-Pro:~ ligulfzhou$ ssh-keygen</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> which to save the key (/Users/ligulfzhou/.ssh/id_rsa):[回车]</span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): [回车]</span><br><span class="line">Enter same passphrase again: [回车]</span><br><span class="line">Your identification has been saved <span class="keyword">in</span> /Users/ligulfzhou/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> /Users/ligulfzhou/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint <span class="keyword">is</span>:</span><br><span class="line">*******</span><br></pre></td></tr></table></figure></p>
-<p>然后将将生成的/Users/ligulfzhou/.ssh/id_rsa.pub文件中的内容添加到测试服务器的~/.ssh/authorized_keys文件的末尾</p>
-<p>现在你再ssh user@your-server就无需输入密码了</p>
-<p>#2. 脚本内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">#先将本地mongo里的数据删掉</span><br><span class="line">mongo &lt;&lt;&lt; &apos;ENDMONFOSHELL&apos;</span><br><span class="line">use dbname1 </span><br><span class="line">db.runCommand(&#123;dropDatabase: 1&#125;)</span><br><span class="line">use dbname2</span><br><span class="line">db.runCommand(&#123;dropDatabase: 2&#125;)</span><br><span class="line">use dbname3 </span><br><span class="line">db.runCommand(&#123;dropDatabase: 3&#125;)</span><br><span class="line">ENDMONGOSHELL</span><br><span class="line">#连上测试机, 将mongodb的数据dump出来, 并打包</span><br><span class="line">ssh user@your-server &lt;&lt;&apos;END&apos;</span><br><span class="line">mongodump</span><br><span class="line">cd dump</span><br><span class="line">tar zcf ../dump.tar.gz .</span><br><span class="line">END</span><br><span class="line">#将测试机上的打包的数据下载下来, 并restore到本地</span><br><span class="line">scp user@your-server:dump.tar.gz ~</span><br><span class="line">cd ~</span><br><span class="line">rm -rf test</span><br><span class="line">mkdir test</span><br><span class="line">cd test</span><br><span class="line">mv ~/dump.tar.gz .</span><br><span class="line">tar zxvf dump.tar.gz</span><br><span class="line">mongorestore -d dbname1 dbname1/</span><br><span class="line">mongorestore -d dbname2 dbname2/</span><br><span class="line">mongorestore -d dbname3 dbname3/</span><br><span class="line">#将测试机上的dump出来的无用数据删掉</span><br><span class="line">ssh user@your-server &lt;&lt;&apos;END&apos;</span><br><span class="line">rm dump.tar.gz</span><br><span class="line">rm dump -rf</span><br><span class="line">END</span><br></pre></td></tr></table></figure></p>
+		<p>公司的app的3.0版本正等着上线，app的调试当然和我无关。<br>但是一报错就喊我，然后我还得ssh连到测试服务器，然后让他们重新做一下操作，我号查看报错信息</p>
+<p>然后我就给公司里的app开发人员写了很短的脚本，当然都称不上啥脚本，至少方便了我，也方便了他们。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh ***@192.168.1.100 &lt;&lt; EOF</span><br><span class="line">    tail -f /path/to/log/file</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>存到文件里，让他们在本地运行，报错的时候，让他们直接把报错信息截图给我，这就方便多了</p>
+<p>当然了，这里最好还是将自己本机的.ssh/id_rsa.pub文件内的内容拷贝到测试服务器的.ssh/authorized_keys文件中，这样就免得每次都要输密码了。。</p>
+<p>原先还给ios的开发人员用python写过自动发布到某测试平台的脚本，已经全忘了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Shell/">Shell</a>
+  <span></span> <a href="/tags/shell/">shell</a>
   </div>
 
 
@@ -111,7 +112,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://ligulfzhou.github.io/2015/12/05/2015-12-05-simple-shell-to-synchronize-server-for-developing-to-local-mongodb/" data-title="用于同步数据库到本地的小脚本 | ligulfzhou" data-tsina="null" class="share clearfix">
+  <div data-url="http://ligulfzhou.github.io/2016/03/26/2016-03-26-shell-snippet-for-app-developer/" data-title="给app开发人员写的shell脚本 | ligulfzhou" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -120,19 +121,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/12/20/2015-12-20-yielded-unknown-object-MotorAggregationCursor/" title="tornado， motor报错yielded unknown object MotorAggregationCursor">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  tornado， motor报错yielded unknown object MotorAggregationCursor</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/12/01/2015-12-01-python-builtin-functional-programming/"  title="python自建的函数式模块">
+<a href="/2016/03/25/2016-03-25-tornado-put-functions-to-template/"  title="tornado中加函数传递到模板引擎的正确方式">
  <strong>NEXT:</strong><br/> 
- <span>python自建的函数式模块
+ <span>tornado中加函数传递到模板引擎的正确方式
 </span>
 </a>
 </div>
