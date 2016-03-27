@@ -9,8 +9,8 @@
     
     <meta name="author" content="Ligulfzhou">
     
-    <meta name="description" content="在学校里就一直有租服务器架vpn的习惯，一般都租个半年或一年的vps，搭个pptp vpn，并分享给同学一起使用。现在这台低配的buyvm openvz服务器，就架着pptp，然后又10人再使用。也是相当的物超所值。
-这台半年的月底就到期了，又新租了一台一年的，并尝试了一下freeradius.（让">
+    <meta name="description" content="在学校里就一直有租服务器架vpn的习惯，一般都租个半年或一年的vps，搭个pptp vpn，并分享给同学一起使用。现在这台低配的buyvm openvz服务器，就架着pptp，然后有10人再使用。也是相当的物超所值。
+这台半年的月底就到期了，所以又新租了一台一年的，并尝试了一下freeradius.">
     
     
     
@@ -74,7 +74,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-03-25T16:00:00.000Z" itemprop="datePublished">2016-03-26</time>
-    Updated:<time datetime="2016-03-26T06:55:57.000Z" itemprop="dateModified">2016-03-26</time>
+    Updated:<time datetime="2016-03-26T06:59:07.000Z" itemprop="dateModified">2016-03-26</time>
     
   </p>
 </header>
@@ -86,14 +86,14 @@
 		
 		</div>
 		
-		<p>在学校里就一直有租服务器架vpn的习惯，一般都租个半年或一年的vps，搭个pptp vpn，并分享给同学一起使用。现在这台低配的buyvm openvz服务器，就架着pptp，然后又10人再使用。也是相当的物超所值。</p>
-<p>这台半年的月底就到期了，又新租了一台一年的，并尝试了一下freeradius.（让pptp vpn的用户信息不用直接明文写在/etc/ppp/chap-secrets文件中，而且由freeradius来处理，账号信息可以存在数据库中，由freeradius去获取和验证）</p>
-<p>安装教程太多，我就直接说一下自己的安装的选择. 我参考了(这个)[<a href="http://blog.csdn.net/alonesword/article/details/19506217]和(这个)[http://www.cnblogs.com/klobohyz/archive/2012/02/04/2338675.html" target="_blank" rel="external">http://blog.csdn.net/alonesword/article/details/19506217]和(这个)[http://www.cnblogs.com/klobohyz/archive/2012/02/04/2338675.html</a>]</p>
+		<p>在学校里就一直有租服务器架vpn的习惯，一般都租个半年或一年的vps，搭个pptp vpn，并分享给同学一起使用。现在这台低配的buyvm openvz服务器，就架着pptp，然后有10人再使用。也是相当的物超所值。</p>
+<p>这台半年的月底就到期了，所以又新租了一台一年的，并尝试了一下freeradius.（让pptp vpn的用户信息不用直接明文写在/etc/ppp/chap-secrets文件中，而且由freeradius来处理，账号信息可以存在数据库中，由freeradius去获取和验证）</p>
+<p>安装教程太多，我就直接说一下自己的安装的选择. 我参考了(这个)[<a href="http://blog.csdn.net/alonesword/article/details/19506217" target="_blank" rel="external">http://blog.csdn.net/alonesword/article/details/19506217</a>] 和 (这个)[<a href="http://www.cnblogs.com/klobohyz/archive/2012/02/04/2338675.html" target="_blank" rel="external">http://www.cnblogs.com/klobohyz/archive/2012/02/04/2338675.html</a>]</p>
 <p>服务器的系统是ubuntu 14.04. freeradius版本直接apt-get install freeradius，系统的freeradius还是2点几，虽然官网上说1.x和2.x都已经EOL（end of life）了， 让你升级到3.x…（尝试了一下没成功，但是2.x的一遍就O了）</p>
 <p>freeradius client是源码编译的1.1.7版本</p>
 <p>最后的最后，有个问题没找到答案的, 日志的报错信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Plugin /usr/lib/pppd/2.4.5/radius.so loaded.</span><br><span class="line">RADIUS plugin initialized.</span><br><span class="line">Plugin /usr/lib/pppd/2.4.5/radattr.so loaded.</span><br><span class="line">RADATTR plugin initialized.</span><br><span class="line">Using interface ppp0</span><br><span class="line">Connect: ppp0 &lt;--&gt; /dev/pts/1</span><br><span class="line">rc_read_dictionary: invalid type on line 92 of dictionary /usr/local/etc/radiusclient/dictionary</span><br><span class="line">RADIUS: Can&apos;t read dictionary file /usr/local/etc/radiusclient/dictionary</span><br><span class="line">Peer ligulfzhou failed CHAP authentication</span><br><span class="line">Hangup (SIGHUP)</span><br><span class="line">Modem hangup</span><br><span class="line">Connection terminated.</span><br></pre></td></tr></table></figure></p>
 <p>是freeradius client的配置信息**行有问题，直接注释掉，然后报错，再注释…然后就可以用了…</p>
-<p>差不多是个流水账，中间有挺多问题，但都通过搜索找到了解决，也就最后没找到，蛋筒多比较二逼的方式解决了</p>
+<p>差不多是个流水账，中间有挺多问题，但都通过搜索找到了解决，也就最后没找到，但通过比较二逼的方式解决了</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -132,9 +132,9 @@
 
 
 <div class="next">
-<a href="/2016/03/25/2016-03-25-tornado-put-functions-to-template/"  title="tornado中加函数传递到模板引擎的正确方式">
+<a href="/2016/03/26/2015-12-12-python-threading-and-multiprocessing/"  title="python的多线程和多进程">
  <strong>NEXT:</strong><br/> 
- <span>tornado中加函数传递到模板引擎的正确方式
+ <span>python的多线程和多进程
 </span>
 </a>
 </div>
@@ -165,7 +165,7 @@
 		
 			<li><a href="/categories/MongoDB/" title="MongoDB">MongoDB<sup>7</sup></a></li>
 		
-			<li><a href="/categories/Python/" title="Python">Python<sup>13</sup></a></li>
+			<li><a href="/categories/Python/" title="Python">Python<sup>14</sup></a></li>
 		
 			<li><a href="/categories/MongoDB/Python/" title="Python">Python<sup>1</sup></a></li>
 		
@@ -210,7 +210,7 @@
 		
 			<li><a href="/tags/qrcode/" title="qrcode">qrcode<sup>1</sup></a></li>
 		
-			<li><a href="/tags/replication/" title="replication">replication<sup>1</sup></a></li>
+			<li><a href="/tags/replSet/" title="replSet">replSet<sup>1</sup></a></li>
 		
 			<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
 		
