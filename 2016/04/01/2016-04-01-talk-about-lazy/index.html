@@ -9,8 +9,8 @@
     
     <meta name="author" content="Ligulfzhou">
     
-    <meta name="description" content="发现自己现在的服务器（vps）数量也不算少，现在还没过期的有5台（为了自己app，还会再租两台年付的）, 5台里3台年付，1台半年的，另1台貌似能免费使用几个月（并不打算长期使用，只是便宜白捡白不捡）
-在大学里也公司的app的3.0版本正等着上线，app的调试当然和我无关。但是一报错就喊我，然后我还">
+    <meta name="description" content="发现自己健在的服务器（vps）数量也不算少，现在还没过期的有5台（还有为了自己app，还会再租两台年付的）, 5台里3台年付，1台半年的，另1台貌似能免费使用几个月（并不打算长期使用，只是便宜白捡白不捡）
+服务器一多，部署，维护还是自己ssh过去操作肯定会变很烦。所以，自动化部署，至少弄个部署脚本，">
     
     
     
@@ -33,7 +33,7 @@
 				<h1 class="site-name"><a href="/" title="ligulfzhou">ligulfzhou</a></h1>
 				<h2 class="blog-motto">北漂小小程序猿</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -50,7 +50,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:ligulfzhou.github.io">
 					</form>
 					
@@ -74,7 +74,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-03-31T16:00:00.000Z" itemprop="datePublished">2016-04-01</time>
-    Updated:<time datetime="2016-04-01T07:44:14.000Z" itemprop="dateModified">2016-04-01</time>
+    更新日期:<time datetime="2016-04-01T08:04:54.000Z" itemprop="dateModified">2016-04-01</time>
     
   </p>
 </header>
@@ -82,18 +82,15 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 		</div>
 		
-		<p>发现自己现在的服务器（vps）数量也不算少，现在还没过期的有5台（为了自己app，还会再租两台年付的）, 5台里3台年付，1台半年的，另1台貌似能免费使用几个月（并不打算长期使用，只是便宜白捡白不捡）</p>
-<p>在大学里也<br>公司的app的3.0版本正等着上线，app的调试当然和我无关。<br>但是一报错就喊我，然后我还得ssh连到测试服务器，然后让他们重新做一下操作，我号查看报错信息</p>
-<p>然后我就给公司里的app开发人员写了很短的脚本，当然都称不上啥脚本，至少方便了我，也方便了他们。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh ***@192.168.1.100 &lt;&lt; EOF</span><br><span class="line">    tail -f /path/to/log/file</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<p>查看log<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh log.sh</span><br></pre></td></tr></table></figure></p>
-<p>存到文件里，让他们在本地运行，报错的时候，让他们直接把报错信息截图给我，这就方便多了</p>
-<p>当然了，这里最好还是将自己本机的.ssh/id_rsa.pub文件内的内容拷贝到测试服务器的.ssh/authorized_keys文件中，这样就免得每次都要输密码了。。</p>
-<p>原先还给ios的开发人员用python写过自动发布到某测试平台的脚本，已经全忘了。</p>
+		<p>发现自己健在的服务器（vps）数量也不算少，现在还没过期的有5台（还有为了自己app，还会再租两台年付的）, 5台里3台年付，1台半年的，另1台貌似能免费使用几个月（并不打算长期使用，只是便宜白捡白不捡）</p>
+<p>服务器一多，部署，维护还是自己ssh过去操作肯定会变很烦。所以，自动化部署，至少弄个部署脚本，越来越变得不可缺少。</p>
+<p>正因为机器的变多，所以现在都在尝试些shell脚本。随便举自己写的一个shell脚本。用于部署tornado应用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 该脚本放在tornado应用的根目录</span><br><span class="line">#打包</span><br><span class="line">tar zcvf ../app.tar.gz .</span><br><span class="line">cd ../</span><br><span class="line"></span><br><span class="line">#传到服务器</span><br><span class="line">scp -i ~/.ssh/privpem.pem app.tar.gz ubuntu@*******:freevpn/app.tar.gz</span><br><span class="line"></span><br><span class="line">#连上服务器后，将app解压到**/&#123;0, 1, 2, 3&#125;, （自己的tornado应用已4个进程发布）</span><br><span class="line">ssh -i ~/.ssh/privpem.pem ubuntu@@*******: &lt;&lt; &apos;END&apos;</span><br><span class="line">    for i in `seq 0 3`</span><br><span class="line">    do</span><br><span class="line">        cp ~/freevpn/app.tar.gz ~/freevpn/$i</span><br><span class="line">        cd freevpn/$i</span><br><span class="line">        tar zxvf app.tar.gz</span><br><span class="line">        cd ~</span><br><span class="line">    done</span><br><span class="line">END</span><br></pre></td></tr></table></figure></p>
+<p>也写过将测试服务器的MongoDB数据库的数据同步到本机。</p>
+<p>蹭着清明，打算尝试一下ansible等集中化管理平台，本地使用vagrant弄个集群来测试测试。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -124,9 +121,9 @@
  
 
 <div class="next">
-<a href="/2016/03/26/2016-03-26-shell-snippet-for-app-developer/"  title="给app开发人员写的shell脚本">
+<a href="/2016/03/26/2016-03-20-pptpd-with-freeradius/"  title="pptpd with freeradius">
  <strong>NEXT:</strong><br/> 
- <span>给app开发人员写的shell脚本
+ <span>pptpd with freeradius
 </span>
 </a>
 </div>
@@ -139,20 +136,20 @@
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目錄</strong>
   
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
 			<li><a href="/categories/MongoDB/" title="MongoDB">MongoDB<sup>7</sup></a></li>
@@ -175,7 +172,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Logging/" title="Logging">Logging<sup>1</sup></a></li>
@@ -219,7 +216,7 @@
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS</a>
+	<a href="null" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
 </aside>
